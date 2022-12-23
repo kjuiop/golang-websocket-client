@@ -76,6 +76,14 @@ func (c *Client) TestSocketConnection(gCtx *gin.Context) {
 	prefix.Data["request_param"] = request
 	c.log.Info(prefix, "[TEST-SocketConnection] API TEST")
 
+	err, errorMsg = TestSocketConnectionProcess(request, c.log)
+	if err != nil {
+		c.log.Error(prefix, errorMsg)
+		response.Message = errorMsg
+		gCtx.Status(http.StatusInternalServerError)
+		return
+	}
+
 	response.Result = "success"
 	gCtx.JSON(http.StatusOK, response)
 	return

@@ -82,6 +82,12 @@ func (l *Logger) Error(prefix *logrus.Entry, format string, args ...interface{})
 	}
 }
 
+func (l *Logger) TestSocketConnectionProcessPrefix(start time.Time) *logrus.Entry {
+	prefix := l.WithFields(logrus.Fields{})
+	prefix.Data["start"] = start
+	return prefix
+}
+
 func (l *Logger) InitPrefixData() *logrus.Entry {
 	prefix := l.WithFields(logrus.Fields{})
 	return prefix
