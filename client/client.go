@@ -1,8 +1,11 @@
 package client
 
 import (
+	"context"
 	"log"
 	"os"
+	"sync"
+	"time"
 
 	"golang-websocket-client/pkg/config"
 	"golang-websocket-client/pkg/logger"
@@ -12,10 +15,17 @@ type Client struct {
 	cfg *config.Configuration
 
 	log *logger.Logger
+
+	gCtx    context.Context
+	gCancel context.CancelFunc
 }
 
 func NewHandler() (*Client, error) {
 	c := new(Client)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	c.gCtx = ctx
+	c.gCancel = cancel
 
 	// config init
 	cfg, err := config.LoadEnv()
@@ -35,6 +45,25 @@ func NewHandler() (*Client, error) {
 	return c, nil
 }
 
-func (s *Client) Close() {
+func (c *Client) Close() {
 	log.Println("[main] Client close")
+}
+
+func (c *Client) CloseWithContext(sigs chan os.Signal, wg *sync.WaitGroup) {
+
+	prefix := c.log.InitPrefixData()
+
+	for {
+		select {
+		case <-sigs:
+			c.log.Debug(prefix, "Receive exit signal")
+			c.gCancel()
+		case <-c.gCtx.Done():
+			c.log.Debug(prefix, "CloseWithContext Close Goroutine")
+			wg.Done()
+			return
+		default:
+			time.Sleep(time.Second * 1)
+		}
+	}
 }

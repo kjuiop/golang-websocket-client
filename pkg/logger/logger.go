@@ -82,6 +82,11 @@ func (l *Logger) Error(prefix *logrus.Entry, format string, args ...interface{})
 	}
 }
 
+func (l *Logger) InitPrefixData() *logrus.Entry {
+	prefix := l.WithFields(logrus.Fields{})
+	return prefix
+}
+
 func (l *Logger) getLevel(level string) (lv logrus.Level) {
 	lv = logrus.InfoLevel
 	switch strings.ToLower(level) {
@@ -127,4 +132,8 @@ func (l *Logger) fileInfo(skip int) string {
 		}
 	}
 	return fmt.Sprintf("%s:%d", file, line)
+}
+
+func (l *Logger) WithFields(fields logrus.Fields) *logrus.Entry {
+	return (*logrus.Entry)(l.log.WithFields(logrus.Fields(fields)))
 }
