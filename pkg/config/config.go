@@ -5,7 +5,10 @@ import (
 )
 
 type Configuration struct {
-	ProductionMode string `envconfig:"CHAT_PRODUCTION_MODE" default:"local"`
+	ProductionMode string `envconfig:"CHAT_CLIENT_PRODUCTION_MODE" default:"local"`
+
+	LogLevel string `envconfig:"CHAT_CLIENT_LOG_LEVEL" default:"debug"`
+	LogPath  string `envconfig:"CHAT_CLIENT_LOG_PATH" default:"/home/jake/chat-client/chat-client.log"`
 }
 
 // 환경 변수 설정

@@ -1,13 +1,17 @@
 package client
 
 import (
-	"golang-websocket-client/pkg/config"
 	"log"
 	"os"
+
+	"golang-websocket-client/pkg/config"
+	"golang-websocket-client/pkg/logger"
 )
 
 type Client struct {
 	cfg *config.Configuration
+
+	log *logger.Logger
 }
 
 func NewHandler() (*Client, error) {
@@ -20,7 +24,13 @@ func NewHandler() (*Client, error) {
 		os.Exit(1)
 	}
 
+	clientLogger, err := logger.LogInitialize(cfg.LogLevel, cfg.LogPath)
+	if err != nil {
+		log.Println("[main] failed log Initialize : ", err)
+	}
+
 	c.cfg = cfg
+	c.log = clientLogger
 
 	return c, nil
 }
