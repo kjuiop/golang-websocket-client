@@ -1,3 +1,8 @@
-#idea
+# idea
 .idea
 golang-websocket-client.iml
+
+# bin
+bin
+ex_*
+
