@@ -6,14 +6,11 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"sync"
 	"syscall"
 )
 
 func main() {
 	fmt.Println("hello golang-websocket-client")
-
-	wg := sync.WaitGroup{}
 
 	sigs := make(chan os.Signal, 1)
 	defer close(sigs)
@@ -26,9 +23,13 @@ func main() {
 	}
 	defer c.Close()
 
+	/** worker 형태로 사용 시 이용
+	wg := sync.WaitGroup{}
+
 	wg.Add(1)
 	go c.CloseWithContext(sigs, &wg)
 
 	wg.Wait()
+	*/
 
 }
