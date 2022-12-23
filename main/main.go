@@ -26,6 +26,8 @@ func main() {
 
 	gMux := gin.Default()
 	gMux.GET("/api/health-check", c.HealthCheck)
+	gMux.POST("/api/test/socket-connection", c.TestSocketConnection)
+
 	apiPort := c.GetApiPort()
 	gMux.Run(":" + apiPort)
 

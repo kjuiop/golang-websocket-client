@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"github.com/gin-gonic/gin"
+	"golang-websocket-client/form"
 	"log"
 	"net/http"
 	"os"
@@ -52,7 +53,31 @@ func (c *Client) Close() {
 }
 
 func (c *Client) HealthCheck(gCtx *gin.Context) {
+
 	gCtx.JSON(http.StatusOK, map[string]string{"result": "success"})
+	return
+}
+
+func (c *Client) TestSocketConnection(gCtx *gin.Context) {
+
+	prefix := c.log.InitPrefixData()
+
+	var request form.SocketConnectionRequest
+	var response form.SocketConnectionResponse
+
+	err, errorMsg := c.readBody(gCtx, &request)
+	if err != nil {
+		c.log.Error(prefix, errorMsg)
+		response.Message = errorMsg
+		gCtx.Status(http.StatusBadRequest)
+		return
+	}
+
+	prefix.Data["request_param"] = request
+	c.log.Info(prefix, "[TEST-SocketConnection] API TEST")
+
+	response.Result = "success"
+	gCtx.JSON(http.StatusOK, response)
 	return
 }
 
