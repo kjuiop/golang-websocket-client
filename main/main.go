@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"golang-websocket-client/client"
 	"log"
 	"os"
@@ -22,6 +23,11 @@ func main() {
 		os.Exit(1)
 	}
 	defer c.Close()
+
+	gMux := gin.Default()
+	gMux.GET("/api/health-check", c.HealthCheck)
+	apiPort := c.GetApiPort()
+	gMux.Run(":" + apiPort)
 
 	/** worker 형태로 사용 시 이용
 	wg := sync.WaitGroup{}

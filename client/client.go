@@ -2,7 +2,9 @@ package client
 
 import (
 	"context"
+	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 	"os"
 	"sync"
 	"time"
@@ -47,6 +49,15 @@ func NewHandler() (*Client, error) {
 
 func (c *Client) Close() {
 	log.Println("[main] Client close")
+}
+
+func (c *Client) HealthCheck(gCtx *gin.Context) {
+	gCtx.JSON(http.StatusOK, map[string]string{"result": "success"})
+	return
+}
+
+func (c *Client) GetApiPort() string {
+	return c.cfg.ApiInfo.Port
 }
 
 func (c *Client) CloseWithContext(sigs chan os.Signal, wg *sync.WaitGroup) {

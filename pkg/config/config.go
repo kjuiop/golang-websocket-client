@@ -9,6 +9,10 @@ type Configuration struct {
 
 	LogLevel string `envconfig:"CHAT_CLIENT_LOG_LEVEL" default:"debug"`
 	LogPath  string `envconfig:"CHAT_CLIENT_LOG_PATH" default:"/home/jake/chat-client/chat-client.log"`
+
+	ApiInfo struct {
+		Port string `envconfig:"CHAT_CLIENT_API_PORT" default:"3020"`
+	}
 }
 
 // 환경 변수 설정
